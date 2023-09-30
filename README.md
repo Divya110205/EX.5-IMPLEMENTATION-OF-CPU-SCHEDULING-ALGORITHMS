@@ -133,7 +133,91 @@ ALGORITHM:
 
 
 PROGRAM:
+#include <stdio.h>
 
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    int process_id[10];
+    int arrival_time[10];
+    int burst_time[10];
+    int completion_time[10];
+    int waiting_time[10];
+    int turnaround_time[10];
+
+    // Input process information
+    for (int i = 0; i < n; i++) {
+        process_id[i] = i + 1;
+        printf("Enter arrival time for process %d: ", process_id[i]);
+        scanf("%d", &arrival_time[i]);
+        printf("Enter burst time for process %d: ", process_id[i]);
+        scanf("%d", &burst_time[i]);
+    }
+
+    // Perform SJF Non-Preemptive Scheduling
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arrival_time[j] > arrival_time[j + 1]) {
+                // Swap arrival_time
+                int temp = arrival_time[j];
+                arrival_time[j] = arrival_time[j + 1];
+                arrival_time[j + 1] = temp;
+
+                // Swap burst_time
+                temp = burst_time[j];
+                burst_time[j] = burst_time[j + 1];
+                burst_time[j + 1] = temp;
+
+                // Swap process_id
+                temp = process_id[j];
+                process_id[j] = process_id[j + 1];
+                process_id[j + 1] = temp;
+            }
+        }
+    }
+
+    int time = 0; // Current time
+
+    for (int i = 0; i < n; i++) {
+        // Find the process with the smallest burst time that has arrived
+        int shortest_job = -1;
+        int shortest_time = 10000; // A large initial value
+
+        for (int j = 0; j < n; j++) {
+            if (arrival_time[j] <= time && burst_time[j] < shortest_time && burst_time[j] != -1) {
+                shortest_job = j;
+                shortest_time = burst_time[j];
+            }
+        }
+
+        if (shortest_job == -1) {
+            // No process is available to run at this time
+            time++;
+        } else {
+            // Execute the selected process
+            completion_time[shortest_job] = time + burst_time[shortest_job];
+            waiting_time[shortest_job] = completion_time[shortest_job] - arrival_time[shortest_job] - burst_time[shortest_job];
+            turnaround_time[shortest_job] = waiting_time[shortest_job] + burst_time[shortest_job];
+            time = completion_time[shortest_job];
+            burst_time[shortest_job] = -1; // Mark the process as completed
+        }
+    }
+
+    // Display the scheduling information
+    printf("\n-----------------------------------\n");
+    printf("Process\tAT\tBT\tCT\tWT\tTAT\n");
+    printf("-----------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n", process_id[i], arrival_time[i],
+               burst_time[i], completion_time[i], waiting_time[i],
+               turnaround_time[i]);
+    }
+    printf("-----------------------------------\n");
+
+    return 0;
+}
 
 OUTPUT:
 
