@@ -231,7 +231,122 @@ ALGORITHM:
 
 PROGRAM:
 
+#include<stdio.h>
+int main()
+{
+int n,i,pro[10],at[10],srt[10],st[10],ft[10],wt[10],tt[10];
+static int iscompleted[10],isstarted[10],isentered[10];
+int queue[10],f,r,count,tq,j,timer,totalsrt,tempsrt[10];
+float rr[10],awt=0,atat=0;
+printf("\n\t ROUND ROBIN");
+printf("\nEnter the no. of process : ");
+scanf("%d",&n);
 
+printf("\nEnter the value for Time Quantum : ");
+scanf("%d",&tq);
+printf("\nEnter the process id for n process : \n");
+for(i=0;i<n;i++)
+{
+scanf("%d",&pro[i]);
+}
+printf("\nEnter the arrival time for n process : \n");
+for(i=0;i<n;i++)
+{
+scanf("%d",&at[i]);
+}
+printf("\nEnter the Burst time for n process : \n");
+for(i=0;i<n;i++)
+{
+scanf("%d",&srt[i]);
+}
+totalsrt=0;
+for(i=0;i<n;i++)
+{
+totalsrt=totalsrt+srt[i];
+tempsrt[i]=srt[i];
+}
+f=0;
+r=-1;
+count=0;
+timer=0;
+for(i=0;i<n;i++)
+{
+if(at[i]==0)
+{
+r=(r+1)%n;
+queue[r]=i;
+isentered[i]=1;
+count=count+1;
+}
+}
+while(timer<totalsrt)
+{
+j=queue[f];
+f=(f+1)%n;
+if(isstarted[j]==0)
+{
+st[j]=timer;
+wt[j]=st[j]-at[j];
+isstarted[j]=1;
+}
+if(srt[j]>=tq)
+
+{
+timer=timer+tq;
+srt[j]=srt[j]-tq;
+}
+else
+{
+timer=timer+srt[j];
+srt[j]=srt[j]-srt[j];
+}
+if(srt[j]==0)
+{
+ft[j]=timer;
+wt[j]=wt[j]+(ft[j]-(st[j]+tempsrt[j]));
+tt[j]=wt[j]+tempsrt[j];
+rr[j]=(float)tt[j]/tempsrt[j];
+iscompleted[j]=1;
+}
+for(i=0;i<n&&count<n;i++)
+{
+if(at[i]<=timer&&isentered[i]==0)
+{
+r=(r+1)%n;
+queue[r]=i;
+isentered[i]=1;
+count=count+1;
+}
+}
+if(iscompleted[j]==0)
+{
+r=(r+1)%n;
+queue[r]=j;
+}
+}
+printf("\n\t CPU SCHEDULING\n\t **************");
+printf("\n\t ROUND ROBIN\n\t ***********\n");
+printf("------------------------------------------- \n");
+printf("PRO AT BUT ST FT WT TT RR");
+printf("\n------------------------------------------- \n");
+for(i=0;i<n;i++)
+{
+printf("%3d %2d %2d",pro[i],at[i],tempsrt[i]);
+printf(" %3d %3d %2d",st[i],ft[i],wt[i]);
+printf(" %3d %4.2f\n",tt[i],rr[i]);
+}
+printf("------------------------------------------ ");
+
+for(i=0;i<n;i++)
+{
+awt=awt+wt[i];
+atat=atat+tt[i];
+}
+awt=awt/n;
+atat=atat/n;
+printf("\nAvg waiting time is %5.2f ",awt );
+printf("\nAvg turn around time is %5.2f",atat);
+}
 OUTPUT:
 
 
