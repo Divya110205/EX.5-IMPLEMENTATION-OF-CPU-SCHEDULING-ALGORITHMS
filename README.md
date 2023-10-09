@@ -53,7 +53,7 @@ for(i=0;i<n;i++)
 { 
 tat[i]=bt[i]+wt[i]; //calculate turnaround time 
 total+=tat[i]; 
-printf("\np%d\t\t %d\t\t %d\t\t\t%d",p[i],bt[i],wt[i],tat[i]); 
+printf("\n\t p%d\t\t\t %d\t\t\t\t %d\t\t\t\t %d",p[i],bt[i],wt[i],tat[i]); 
 } 
  
 avg_tat=(float)total/n; //average turnaround time 
@@ -63,10 +63,9 @@ printf("\nAverage Turnaround Time = %f\n",avg_tat);
 ```
 
 ### OUTPUT:
-![1](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/3aa3c227-f52d-46cf-8390-31df0daafcdf)
+![1](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/c89a3cfc-1644-4ae5-9b9a-8ed1e5541bfc)
 
-### RESULT: 
-
+### RESULT:
 First-Come-First-Serve Scheduling is implemented successfully.
 
 ### AIM: 
