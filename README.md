@@ -222,12 +222,12 @@ total+=wt[i];
 avg_wt=(float)total/n; //average waiting time 
 total=0; 
  
-printf("\nProcess\t Burst Time \tWaiting Time\tTurnaround Time"); 
+printf("\n Process\t Burst Time \tWaiting Time\tTurnaround Time"); 
 for(i=0;i<n;i++) 
 { 
 tat[i]=bt[i]+wt[i]; //calculate turnaround time 
 total+=tat[i]; 
-printf("\np%d\t\t %d\t\t %d\t\t\t%d",p[i],bt[i],wt[i],tat[i]); 
+printf("\n\t p%d\t\t %d\t\t\t\t %d\t\t\t%d",p[i],bt[i],wt[i],tat[i]); 
 } 
  
 avg_tat=(float)total/n; //average turnaround time 
@@ -238,7 +238,7 @@ printf("\nAverage Turnaround Time = %f\n",avg_tat);
 ```
 
 ### OUTPUT:
-![3](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/1f4f58ca-6a80-468d-985d-7898c1b14707)
+![3](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/9ac1ebac-16e1-49fd-aa50-b9c0e197fcdf)
 
 ### RESULT: 
 
