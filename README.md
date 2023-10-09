@@ -251,132 +251,78 @@ To implement Round Robin (RR) Scheduling
 
 ### ALGORITHM:
 
-Initialize variables and arrays to store process information, scheduling data, and status flags. Read the number of processes (n) and the time quantum (tq) from the user.Input process information for each process, including process ID (PRO), arrival time (AT), and burst time (BUT). Also, calculate the total remaining burst time (totalsrt) and create a temporary array (tempsrt) to store the initial burst times. Initialize the queue (queue), front (f), rear (r), and count variables for the ready queue. 
-
-Also, initialize the timer to 0. Enqueue processes that arrive at time 0 into the ready queue and mark them as entered (isentered) with count increments.Enter the main scheduling loop, which continues until the timer reaches the total remaining burst time (totalsrt). Dequeue a process from the front of the ready queue (queue[f]) and select it for execution.If the selected process is starting for the first time (isstarted is 0), record its start time (ST) and calculate its waiting time (WT).Execute the process for a time quantum (tq) or until its burst time (BUT) is less than tq, whichever comes first.
-
-Update the timer accordingly. If the process has completed its burst time (BUT becomes 0), record its finish time (FT), calculate its waiting time (WT), turnaround time (TT), and response ratio (RR), and mark it as completed (iscompleted).Check for processes that have arrived and have not entered the ready queue (isentered is 0). Enqueue them into the ready queue with count increments.If the selected process is not completed, enqueue it back into the ready queue Repeat the scheduling loop until the timer reaches totalsrt. 
-
-Display the scheduling results, including process ID (PRO), arrival time (AT), initial burst time (BUT), start time (ST), finish time (FT), waiting time (WT), turnaround time (TT), and response ratio (RR) for each process.Calculate and display the average waiting time (AWT) and average turnaround time (ATAT) for all processes.
+1. Start the process 
+2. Get the number of elements to be inserted 
+3. Get the value for burst time for individual processes 
+4. Get the value for time quantum 
+5. Make the CPU scheduler go around the ready queue allocating CPU to each process 
+for the time interval specified 
+6. Make the CPU scheduler pick the first process and set time to interrupt after quantum. 
+And after it's expiry dispatch the process 
+7. If the process has burst time less than the time quantum then the process is released by 
+the CPU 
+8. If the process has burst time greater than time quantum then it is interrupted by the OS 
+and the process is put to the tail of ready queue and the schedule selects next 
+process from head of the queue 
+9. Calculate the total and average waiting time and turnaround time 
+10. Display the results
 
 ### PROGRAM:
 ```
-#include<stdio.h>
-int main()
-{
-int n,i,pro[10],at[10],srt[10],st[10],ft[10],wt[10],tt[10];
-static int iscompleted[10],isstarted[10],isentered[10];
-int queue[10],f,r,count,tq,j,timer,totalsrt,tempsrt[10];
-float rr[10],awt=0,atat=0;
-printf("\n\t ROUND ROBIN");
-printf("\nEnter the no. of process : ");
-scanf("%d",&n);
-
-printf("\nEnter the value for Time Quantum: ");
-scanf("%d",&tq);
-printf("\nEnter the process id for n process: \n");
-for(i=0;i<n;i++)
-{
-scanf("%d",&pro[i]);
-}
-printf("\nEnter the arrival time for n process: \n");
-for(i=0;i<n;i++)
-{
-scanf("%d",&at[i]);
-}
-printf("\nEnter the Burst time for n process:\n");
-for(i=0;i<n;i++)
-{
-scanf("%d",&srt[i]);
-}
-totalsrt=0;
-for(i=0;i<n;i++)
-{
-totalsrt=totalsrt+srt[i];
-tempsrt[i]=srt[i];
-}
-f=0;
-r=-1;
-count=0;
-timer=0;
-for(i=0;i<n;i++)
-{
-if(at[i]==0)
-{
-r=(r+1)%n;
-queue[r]=i;
-isentered[i]=1;
-count=count+1;
-}
-}
-while(timer<totalsrt)
-{
-j=queue[f];
-f=(f+1)%n;
-if(isstarted[j]==0)
-{
-st[j]=timer;
-wt[j]=st[j]-at[j];
-isstarted[j]=1;
-}
-if(srt[j]>=tq)
-
-{
-timer=timer+tq;
-srt[j]=srt[j]-tq;
-}
-else
-{
-timer=timer+srt[j];
-srt[j]=srt[j]-srt[j];
-}
-if(srt[j]==0)
-{
-ft[j]=timer;
-wt[j]=wt[j]+(ft[j]-(st[j]+tempsrt[j]));
-tt[j]=wt[j]+tempsrt[j];
-rr[j]=(float)tt[j]/tempsrt[j];
-iscompleted[j]=1;
-}
-for(i=0;i<n&&count<n;i++)
-{
-if(at[i]<=timer&&isentered[i]==0)
-{
-r=(r+1)%n;
-queue[r]=i;
-isentered[i]=1;
-count=count+1;
-}
-}
-if(iscompleted[j]==0)
-{
-r=(r+1)%n;
-queue[r]=j;
-}
-}
-printf("\n\t CPU SCHEDULING\n\t **************");
-printf("\n\t ROUND ROBIN\n\t ***********\n");
-printf("------------------------------------------- \n");
-printf("PRO AT BUT ST FT WT TT RR");
-printf("\n------------------------------------------- \n");
-for(i=0;i<n;i++)
-{
-printf("%3d %2d %2d",pro[i],at[i],tempsrt[i]);
-printf(" %3d %3d %2d",st[i],ft[i],wt[i]);
-printf(" %3d %4.2f\n",tt[i],rr[i]);
-}
-printf("------------------------------------------ ");
-
-for(i=0;i<n;i++)
-{
-awt=awt+wt[i];
-atat=atat+tt[i];
-}
-awt=awt/n;
-atat=atat/n;
-printf("\nAvg waiting time is %5.2f ",awt );
-printf("\nAvg turn around time is %5.2f",atat);
-}
+#include<stdio.h> 
+int main() 
+{ 
+int st[10],bt[10],wt[10],tat[10],n,tq; int 
+i,count=0,swt=0,stat=0,temp,sq=0; 
+float awt,atat; 
+printf("enter the number of processes : "); 
+scanf("%d",&n); 
+printf("enter the burst time of each process\n"); 
+for(i=0;i<n;i++) 
+{ 
+printf("p%d : ",i+1); 
+scanf("%d",&bt[i]); 
+st[i]=bt[i]; 
+} 
+printf("enter the time quantum : "); 
+scanf("%d",&tq); 
+while(1) 
+{ 
+for(i=0,count=0;i<n;i++) 
+{ 
+temp=tq; 
+if(st[i]==0) 
+{ 
+count++; 
+continue; 
+} 
+if(st[i]>tq) 
+st[i]=st[i]-tq; 
+else 
+if(st[i]>=0) 
+{ 
+temp=st[i]; 
+st[i]=0; 
+} 
+sq=sq+temp; 
+tat[i]=sq; 
+} 
+if(n==count) 
+break; 
+} 
+for(i=0;i<n;i++) 
+{ 
+wt[i]=tat[i]-bt[i]; 
+swt=swt+wt[i]; 
+stat=stat+tat[i]; 
+} 
+awt=(float)swt/n; 
+atat=(float)stat/n; 
+printf("process no\t burst time\t waiting time\t turnaround time\n"); 
+for(i=0;i<n;i++) 
+printf("%d\t\t %d\t\t %d\t\t %d\n",i+1,bt[i],wt[i],tat[i]); 
+printf("avg wt time = %f \n,avg turn around time = %f ",awt,atat); 
+} 
 ```
 
 ### OUTPUT:
