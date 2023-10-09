@@ -165,109 +165,81 @@ To implement Shortest Job First (SJF) Non-Preemptive Scheduling
 
 ### ALGORITHM:
 
-Initialize variables and arrays to store process information, such as process ID (process_id), arrival time (arrival_time), burst time (burst_time), completion time (completion_time), waiting time (waiting_time), and turnaround time (turnaround_time).Read the number of processes (n) from the user.Input process information for each process, including arrival time and burst time, and store this information in the respective arrays.Sort the processes based on their arrival times in ascending order using a simple bubble sort algorithm. This step ensures that processes are in the order of their arrival.Initialize the current time (time) to 0. 
-
-Perform the scheduling loop for all processes: 
-
-a. Find the process with the smallest burst time that has already arrived and is not yet completed. Initialize "shortest_job" to -1 and "shortest_time" to a large initial value.
-
-b. Iterate through the processes, checking if they have arrived and if their burst time is smaller than the current "shortest_time." If so, update "shortest_job" to the current process.
-
-c. If "shortest_job" remains -1, it means no process is available to run at this time. Increment the time by 1. 
-
-d. If a process is available (shortest_job != -1), execute the selected process. Update the completion time, waiting time, and turnaround time for this process. Mark the burst time of the completed process as -1 to indicate completion.Display the scheduling information in a tabular format, including Process ID (P), Arrival Time (AT), Burst Time (BT), Completion Time (CT), Waiting Time (WT), and Turnaround Time (TAT) for each process.
-
+1. Start the process 
+2. Get the number of processes to be inserted 
+3. Sort the processes according to the burst tiine and allocate the one with shortest burst to 
+execute first 
+4. If two process have same burst length then FCFS scheduling algorithm is used 
+5. Calculate the total and average waiting time and turn around time 
+6. Display the values 
+7. Stop the process
+   
 ### PROGRAM:
 ```
-#include <stdio.h>
+#include<stdio.h> 
+int main() 
+{ 
+int bt[20],p[20],wt[20],tat[20],i,j,n,total=0,pos,temp; float 
+avg_wt,avg_tat; 
+printf("Enter number of process : "); 
+scanf("%d",&n); 
+ 
+printf("\nEnter Burst Time:\n"); 
+for(i=0;i<n;i++) 
+{ 
+printf("p%d : ",i+1); 
+scanf("%d",&bt[i]); 
+p[i]=i+1; //contains process number 
+} 
+//sorting burst time in ascending order using selection sort 
+for(i=0;i<n;i++) 
+{ 
+pos=i; 
+for(j=i+1;j<n;j++) 
+{ 
+if(bt[j]<bt[pos]) 
+pos=j; 
+} 
+temp=bt[i]; 
+bt[i]=bt[pos]; 
+bt[pos]=temp; 
+ 
+temp=p[i]; 
+p[i]=p[pos]; 
+p[pos]=temp; 
+} 
+wt[0]=0; //waiting time for first process will be zero 
+ 
+//calculate waiting time 
+for(i=1;i<n;i++) 
+{ 
+wt[i]=0; 
+ 
+for(j=0;j<i;j++) 
+wt[i]+=bt[j]; 
+total+=wt[i]; 
+} 
+ 
+avg_wt=(float)total/n; //average waiting time 
+total=0; 
+ 
+printf("\nProcess\t Burst Time \tWaiting Time\tTurnaround Time"); 
+for(i=0;i<n;i++) 
+{ 
+tat[i]=bt[i]+wt[i]; //calculate turnaround time 
+total+=tat[i]; 
+printf("\np%d\t\t %d\t\t %d\t\t\t%d",p[i],bt[i],wt[i],tat[i]); 
+} 
+ 
+avg_tat=(float)total/n; //average turnaround time 
+printf("\n\nAverage Waiting Time = %f",avg_wt); 
+printf("\nAverage Turnaround Time = %f\n",avg_tat); 
+} 
 
-int main() {
-    int n;
-    printf("Enter the number of processes: ");
-    scanf("%d", &n);
-
-    int process_id[10];
-    int arrival_time[10];
-    int burst_time[10];
-    int completion_time[10];
-    int waiting_time[10];
-    int turnaround_time[10];
-
-    // Input process information
-    for (int i = 0; i < n; i++) {
-        process_id[i] = i + 1;
-        printf("Enter arrival time for process %d: ", process_id[i]);
-        scanf("%d", &arrival_time[i]);
-        printf("Enter burst time for process %d: ", process_id[i]);
-        scanf("%d", &burst_time[i]);
-    }
-
-    // Perform SJF Non-Preemptive Scheduling
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arrival_time[j] > arrival_time[j + 1]) {
-                // Swap arrival_time
-                int temp = arrival_time[j];
-                arrival_time[j] = arrival_time[j + 1];
-                arrival_time[j + 1] = temp;
-
-                // Swap burst_time
-                temp = burst_time[j];
-                burst_time[j] = burst_time[j + 1];
-                burst_time[j + 1] = temp;
-
-                // Swap process_id
-                temp = process_id[j];
-                process_id[j] = process_id[j + 1];
-                process_id[j + 1] = temp;
-            }
-        }
-    }
-
-    int time = 0; // Current time
-
-    for (int i = 0; i < n; i++) {
-        // Find the process with the smallest burst time that has arrived
-        int shortest_job = -1;
-        int shortest_time = 10000; // A large initial value
-
-        for (int j = 0; j < n; j++) {
-            if (arrival_time[j] <= time && burst_time[j] < shortest_time && burst_time[j] != -1) {
-                shortest_job = j;
-                shortest_time = burst_time[j];
-            }
-        }
-
-        if (shortest_job == -1) {
-            // No process is available to run at this time
-            time++;
-        } else {
-            // Execute the selected process
-            completion_time[shortest_job] = time + burst_time[shortest_job];
-            waiting_time[shortest_job] = completion_time[shortest_job] - arrival_time[shortest_job] - burst_time[shortest_job];
-            turnaround_time[shortest_job] = waiting_time[shortest_job] + burst_time[shortest_job];
-            time = completion_time[shortest_job];
-            burst_time[shortest_job] = -1; // Mark the process as completed
-        }
-    }
-
-    // Display the scheduling information
-    printf("\n-----------------------------------\n");
-    printf("Process\tAT\tBT\tCT\tWT\tTAT\n");
-    printf("-----------------------------------\n");
-    for (int i = 0; i < n; i++) {
-        printf("P%d\t%d\t%d\t%d\t%d\t%d\n", process_id[i], arrival_time[i],
-               burst_time[i], completion_time[i], waiting_time[i],
-               turnaround_time[i]);
-    }
-    printf("-----------------------------------\n");
-
-    return 0;
-}
 ```
 
 ### OUTPUT:
-![3](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/00c84c40-d150-4713-a6d3-9401cfaaecfc)
+![3](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/1f4f58ca-6a80-468d-985d-7898c1b14707)
 
 ### RESULT: 
 
