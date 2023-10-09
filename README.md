@@ -155,6 +155,17 @@ printf("\nAverage turn around time is %5.2f",att);
 
 Shortest Job First (SJF) preemptive scheduling is implemented successfully.
 
+
+
+
+
+
+
+
+
+
+
+
 ### AIM:
 
 To implement Shortest Job First (SJF) Non-Preemptive Scheduling
