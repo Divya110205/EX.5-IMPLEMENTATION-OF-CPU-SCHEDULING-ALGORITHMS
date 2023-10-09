@@ -319,13 +319,13 @@ awt=(float)swt/n;
 atat=(float)stat/n; 
 printf("process no\t burst time\t waiting time\t turnaround time\n"); 
 for(i=0;i<n;i++) 
-printf("%d\t\t %d\t\t %d\t\t %d\n",i+1,bt[i],wt[i],tat[i]); 
-printf("avg wt time = %f \n,avg turn around time = %f ",awt,atat); 
+printf("\t\t %d\t\t %d\t\t\t %d\t\t\t %d\n",i+1,bt[i],wt[i],tat[i]); 
+printf("avg wt time = %f \navg turn around time = %f ",awt,atat); 
 } 
 ```
 
 ### OUTPUT:
-![4](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/dba7938b-b7ce-45cb-96cb-e5637e7d0074)
+![4](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/e3e06e36-fe82-4d4d-aa35-d7ab3048fa13)
 
 ### RESULT:
 
