@@ -9,13 +9,10 @@ To implement First-Come-First-Serve (FCFS) Scheduling
 1. Start the process 
 2. Get the number of processes to be inserted 
 3. Get the value for burst time of each process from the user 
-4. Having allocated the burst time(bt) for individual processes , Start with the first 
-process from its initial position let other process to be in queue 
+4. Having allocated the burst time(bt) for individual processes , Start with the first process from its initial position let other process to be in queue 
 5. Calculate the waiting time(wt) and turnaround time(tat) as 
-6. Wt(pi) = wt(pi-1) + tat(pi-1) (i.e. wt of current process = wt of previous process + tat of 
-previous process) 
-7. tat(pi) = wt(pi) + bt(pi) (i.e. tat of current process = wt of current process + bt of 
-current process) 
+6. Wt(pi) = wt(pi-1) + tat(pi-1) (i.e. wt of current process = wt of previous process + tat of previous process) 
+7. tat(pi) = wt(pi) + bt(pi) (i.e. tat of current process = wt of current process + bt of current process) 
 8. Calculate the total and average waiting time and turnaround time 
 9. Display the values 
 10. Stop the process
@@ -166,8 +163,7 @@ To implement Shortest Job First (SJF) Non-Preemptive Scheduling
 
 1. Start the process 
 2. Get the number of processes to be inserted 
-3. Sort the processes according to the burst tiine and allocate the one with shortest burst to 
-execute first 
+3. Sort the processes according to the burst tiine and allocate the one with shortest burst to execute first 
 4. If two process have same burst length then FCFS scheduling algorithm is used 
 5. Calculate the total and average waiting time and turn around time 
 6. Display the values 
@@ -254,15 +250,10 @@ To implement Round Robin (RR) Scheduling
 2. Get the number of elements to be inserted 
 3. Get the value for burst time for individual processes 
 4. Get the value for time quantum 
-5. Make the CPU scheduler go around the ready queue allocating CPU to each process 
-for the time interval specified 
-6. Make the CPU scheduler pick the first process and set time to interrupt after quantum. 
-And after it's expiry dispatch the process 
-7. If the process has burst time less than the time quantum then the process is released by 
-the CPU 
-8. If the process has burst time greater than time quantum then it is interrupted by the OS 
-and the process is put to the tail of ready queue and the schedule selects next 
-process from head of the queue 
+5. Make the CPU scheduler go around the ready queue allocating CPU to each process for the time interval specified 
+6. Make the CPU scheduler pick the first process and set time to interrupt after quantum. And after it's expiry dispatch the process 
+7. If the process has burst time less than the time quantum then the process is released by the CPU 
+8. If the process has burst time greater than time quantum then it is interrupted by the OS and the process is put to the tail of ready queue and the schedule selects next process from head of the queue 
 9. Calculate the total and average waiting time and turnaround time 
 10. Display the results
 
@@ -434,151 +425,86 @@ Priority Preemptive scheduling is implemented successfully.
 To implement Priority Non-Preemptive Scheduling
 
 ### ALGORITHM:
-
-Initialize variables and arrays to store process information, scheduling data, and status flags.Input the number of processes and their details, including process ID (PID), arrival time (AT), burst time (SRT), and priority.Calculate the total remaining burst time (totalsrt) by summing up the burst times of all processes and create a temporary array (tempsrt) to store the initial burst times.Initialize the timer to 0.Enter the main scheduling loop, which continues until all processes have completed execution (i.e., completed variable reaches n).
-
-Within the loop, find the process with the highest priority that has arrived and not yet completed and has the lowest priority (higher priority value).If a process is found, update its start time (ST) and calculate waiting time (WT) if it's starting for the first time (isstarted[i] is 0).Reduce the remaining burst time (SRT) of the selected process by 1, indicating the execution of one time unit.Increment the timer by 1.
-
-If the selected process has completed its execution (SRT becomes 0), update its finish time (FT), waiting time (WT), turnaround time (TT), response ratio (RR), and set the process as completed (iscompleted[i] is 1).Continue this loop until all processes are completed.After scheduling all processes, display the scheduling results in a tabular format, including PID, AT, SRT, ST, FT, WT, TT, RR, and priority for each process.Calculate and display the average waiting time (AWT) and average turnaround time (ATAT) for all processes.
-
+1. Start the process 
+2. Get the number of processes to be inserted 
+3. Get the corresponding priority of processes 
+4. Sort the processes according to the priority and allocate the one with highest priority to execute first 
+5. If two process have same priority then FCFS scheduling algorithm is used 
+6. Calculate the total and average waiting time and turnaround time 
+7. Display the values 
+8. Stop the process
 ### PROGRAM:
 ```
-#include<stdio.h>
- // structure representing a structure
-struct priority_scheduling {
-
-  // name of the process
-  char process_name;
-
-  // time required for execution
-  int burst_time;
-
-  // waiting time of a process
-  int waiting_time;
-
-  // total time of execution
-  int turn_around_time;
-
-  // priority of the process
-  int priority;
-};
-
-int main() {
-
-  // total number of processes
-  int number_of_process;
-
-  // total waiting and turnaround time
-  int total = 0;
-
-  // temporary structure for swapping
-  struct priority_scheduling temp_process;
-
-  // ASCII numbers are used to represent the name of the process
-  int ASCII_number = 65;
-
-  // swapping position
-  int position;
-
-  // average waiting time of the process
-  float average_waiting_time;
-
-  // average turnaround time of the process
-  float average_turnaround_time;
-
-  printf("Enter the total number of Processes: ");
-  // get the total number of the process as input
-  scanf("%d", & number_of_process);
-
-  // initializing the structure array
-  struct priority_scheduling process[number_of_process];
-
-  printf("\nPlease Enter the  Burst Time and Priority of each process:\n");
-
-  // get burst time and priority of all process
-  for (int i = 0; i < number_of_process; i++) {
-
-    // assign names consecutively using ASCII number
-    process[i].process_name = (char) ASCII_number;
-
-    printf("\nEnter the details of the process %c \n", process[i].process_name);
-    printf("Enter the burst time: ");
-    scanf("%d", & process[i].burst_time);
-
-    printf("Enter the priority: ");
-    scanf("%d", & process[i].priority);
-
-    // increment the ASCII number to get the next alphabet
-    ASCII_number++;
-
-  }
-
-  // swap process according to high priority
-  for (int i = 0; i < number_of_process; i++) {
-
-    position = i;
-
-    for (int j = i + 1; j < number_of_process; j++) {
-
-      // check if priority is higher for swapping
-      if (process[j].priority > process[position].priority)
-        position = j;
-    }
-    // swapping of lower priority process with the higher priority process 
-    temp_process = process[i];
-    process[i] = process[position];
-    process[position] = temp_process;
-  }
-  // First process will not have to wait and hence has a waiting time of 0
-  process[0].waiting_time = 0;
-
-  for (int i = 1; i < number_of_process; i++) {
-    process[i].waiting_time = 0;
-    for (int j = 0; j < i; j++) {
-      // calculate waiting time
-      process[i].waiting_time += process[j].burst_time;
-    }
-
-    // calculate total waiting time             
-    total += process[i].waiting_time;
-  }
-
-  // calculate average waiting time
-  average_waiting_time = (float) total / (float) number_of_process;
-
-  // assigning total as 0 for next calculations
-  total = 0;
-
-  printf("\n\nProcess_name \t Burst Time \t Waiting Time \t  Turnaround Time\n");
-  printf("------------------------------------------------------------\n");
-
-  for (int i = 0; i < number_of_process; i++) {
-
-    // calculating the turnaround time of the processes
-    process[i].turn_around_time = process[i].burst_time + process[i].waiting_time;
-
-    // calculating the total turnaround time.
-    total += process[i].turn_around_time;
-
-    // printing all the values
-    printf("\t  %c \t\t  %d \t\t %d \t\t %d", process[i].process_name, process[i].burst_time, process[i].waiting_time, process[i].turn_around_time);
-    printf("\n-----------------------------------------------------------\n");
-  }
-
-  // calculating the average turn_around time 
-  average_turnaround_time = (float) total / (float) number_of_process;
-
-  // average waiting time
-  printf("\n\n Average Waiting Time : %f", average_waiting_time);
-
-  // average turnaround time
-  printf("\n Average Turnaround Time: %f\n", average_turnaround_time);
-
-  return 0;
+#include<stdio.h> 
+ 
+int main() 
+{ 
+int bt[20],p[20],wt[20],tat[20],pri[20],i,j,k,n,total=0,pos,temp; float 
+avg_wt,avg_tat; 
+printf("Enter number of process : "); 
+scanf("%d",&n); 
+ 
+printf("\nEnter Burst Time:\n"); 
+for(i=0;i<n;i++) 
+{ 
+printf("p%d : ",i+1); 
+scanf("%d",&bt[i]); 
+p[i]=i+1; //contains process number 
+} 
+printf(" enter priority of the process \n"); 
+for(i=0;i<n;i++) 
+{ 
+p[i] = i; 
+//printf("Priority of Process"); 
+printf("p%d : ",i+1); 
+scanf("%d",&pri[i]); 
+} 
+for(i=0;i<n;i++) 
+for(k=i+1;k<n;k++) 
+if(pri[i] > pri[k]) 
+{ 
+temp=p[i]; 
+p[i]=p[k]; 
+p[k]=temp; 
+ 
+temp=bt[i]; 
+bt[i]=bt[k]; 
+bt[k]=temp; 
+temp=pri[i]; 
+pri[i]=pri[k]; 
+pri[k]=temp; 
+ 
+} 
+ 
+wt[0]=0; //waiting time for first process will be zero 
+ 
+//calculate waiting time 
+for(i=1;i<n;i++) 
+{ 
+wt[i]=0; 
+for(j=0;j<i;j++) 
+wt[i]+=bt[j]; 
+ 
+total+=wt[i]; 
+} 
+avg_wt=(float)total/n; //average waiting time 
+total=0; 
+ 
+printf("\nProcess\t Burst Time \tPriority \tWaiting Time\tTurnaround Time"); 
+for(i=0;i<n;i++) 
+{ 
+tat[i]=bt[i]+wt[i]; //calculate turnaround time 
+total+=tat[i]; 
+printf("\n\t p%d\t\t %d\t\t\t %d\t\t\t %d\t\t\t\t%d",p[i],bt[i],pri[i],wt[i],tat[i]); 
+} 
+ 
+avg_tat=(float)total/n; //average turnaround time 
+printf("\n\nAverage Waiting Time = %f",avg_wt); 
+printf("\nAverage Turnaround Time = %f\n",avg_tat); 
 }
 ```
 ### OUTPUT:
-![6](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/6941d816-e6cc-4a22-9f29-2bc727916063)
+![6](https://github.com/Divya110205/EX.5-IMPLEMENTATION-OF-CPU-SCHEDULING-ALGORITHMS/assets/119404855/049ac8a8-e2e5-4b46-90be-e3fe4af8d406)
 
 ### RESULT: 
 
